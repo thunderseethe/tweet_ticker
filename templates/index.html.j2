@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ title }}</title>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<style>
+			body {
+				background-color: #484349;
+			}
+			input[type="text"] {
+				background-color: #F7F0F0;
+			}
+			#histogramChart {
+				background-color: #F7F0F0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="form-group col-10 offset-1">
+					<input type="text" id="twitterTextInput" class="form-control" placeholder="Twitter Query" /> 
+				</div>
+			</div>
+			<div class="row">
+				<canvas class="col-10 offset-1" id="histogramChart">
+					<!-- chart generated here -->
+				</canvas>
+			</div>
+		</div>
+
+
+		<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>-->
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function(evt) {
+				var data = {
+					labels: ["-1", "-0.75", "-0.5", "0", "0.25", "0.5", "1.0"],
+					datasets: [
+						{ label: "My first dataset"
+						, backgroundColor: [
+							'rgba(255, 99, 132, 0.2)',
+			                'rgba(54, 162, 235, 0.2)',
+			                'rgba(255, 206, 86, 0.2)',
+			                'rgba(75, 192, 192, 0.2)',
+			                'rgba(153, 102, 255, 0.2)',
+			                'rgba(255, 159, 64, 0.2)',
+			                'rgba(16, 150, 72, 0.2)'
+		                ]
+                		, borderColor: [
+                			'rgba(255,99,132,1)',
+			                'rgba(54, 162, 235, 1)',
+			                'rgba(255, 206, 86, 1)',
+			                'rgba(75, 192, 192, 1)',
+			                'rgba(153, 102, 255, 1)',
+			                'rgba(255, 159, 64, 1)',
+			                'rgba(16, 150, 72, 1)'
+                		]
+                		, borderWidth: 1
+                		, data: [65, 59, 80, 81, 56, 55, 40]
+						}
+					],
+	
+				};
+				var options = {
+					scales: {
+						xAxes: [
+							{ categoryPercentage: 1.0
+							, barPercentage: 1.0
+							}
+						],
+						yAxes: [
+							{ type: "linear"
+							, 
+							}
+						]
+					}
+				}
+
+				var ctx = document.getElementById("histogramChart");
+				var chart = new Chart(ctx, {
+					type: 'bar',
+					data: data,
+					options: options
+				});
+			});
+
+			
+		</script>
+	</body>
+</html>
