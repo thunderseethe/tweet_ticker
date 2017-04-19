@@ -23,76 +23,69 @@
 	<body>
 		<div class="container-fluid">
 			<div class="row">
-				<div class="form-group col-10 offset-1">
-					<input type="text" id="twitterTextInput" class="form-control" placeholder="Twitter Query" /> 
+				<div class="col-10 offset-1">
+					<div class="input-group">
+						<input type="text" id="twitterTextInput" class="form-control" placeholder="Twitter Query" /> 
+						<span class="input-group-btn">
+							<button id="searchBtn" class="btn btn-primary" type="button">Search</button>
+						</span>
+					</div>
 				</div>
 			</div>
 			<div class="row">
-				<canvas class="col-10 offset-1" id="histogramChart">
+				<div class="col-10 offset-1" id="histogramChart">
 					<!-- chart generated here -->
-				</canvas>
+				</div>
 			</div>
 		</div>
 
 
-		<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>-->
+		<script>
+			document.addEventListener('DOMContentLoaded', function(evt) {
+				$('#histogramChart').height($('#histogramChart').width() * 1/2);
+			});
+		</script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>-->
 
 		<script>
-			document.addEventListener('DOMContentLoaded', function(evt) {
-				var data = {
-					labels: ["-1", "-0.75", "-0.5", "0", "0.25", "0.5", "1.0"],
-					datasets: [
-						{ label: "My first dataset"
-						, backgroundColor: [
-							'rgba(255, 99, 132, 0.2)',
-			                'rgba(54, 162, 235, 0.2)',
-			                'rgba(255, 206, 86, 0.2)',
-			                'rgba(75, 192, 192, 0.2)',
-			                'rgba(153, 102, 255, 0.2)',
-			                'rgba(255, 159, 64, 0.2)',
-			                'rgba(16, 150, 72, 0.2)'
-		                ]
-                		, borderColor: [
-                			'rgba(255,99,132,1)',
-			                'rgba(54, 162, 235, 1)',
-			                'rgba(255, 206, 86, 1)',
-			                'rgba(75, 192, 192, 1)',
-			                'rgba(153, 102, 255, 1)',
-			                'rgba(255, 159, 64, 1)',
-			                'rgba(16, 150, 72, 1)'
-                		]
-                		, borderWidth: 1
-                		, data: [65, 59, 80, 81, 56, 55, 40]
-						}
-					],
-	
-				};
-				var options = {
-					scales: {
-						xAxes: [
-							{ categoryPercentage: 1.0
-							, barPercentage: 1.0
-							}
-						],
-						yAxes: [
-							{ type: "linear"
-							, 
-							}
-						]
-					}
-				}
-
-				var ctx = document.getElementById("histogramChart");
-				var chart = new Chart(ctx, {
-					type: 'bar',
-					data: data,
-					options: options
-				});
+			google.charts.load("current", {packages:["corechart"]});
+			google.charts.setOnLoadCallback(function() {
+				$('#searchBtn').on('click', function(evt) {
+					var value = $('#twitterTextInput').val();
+					console.log('Search called');	
+					$.getJSON('/query/' + value, function(data) {
+						console.log(data);
+						drawChart([["Tweet Text", "Sentiment"]].concat(data.data));
+						/* 
+						do what you want with percentages here 
+						*/
+					})
+					$.ajax
+				})
+				
 			});
-
+			function drawChart(rawData) {
+				var data = google.visualization.arrayToDataTable(rawData);
+				var options = {
+					title: 'Opinions of Tweets',
+					legend: { position: 'none' },
+					hAxis: { viewWindowMode: 'pretty' },
+					vAxis: { viewWindowMode: 'pretty' },
+					chartArea: {
+						left:'10%',
+						top:'10%',
+						width: '75%',
+						height: '75%'
+					}
+				};
+				var chart = new google.visualization.Histogram(document.getElementById('histogramChart'));
+				chart.draw(data, options);
+			}
 			
 		</script>
 	</body>

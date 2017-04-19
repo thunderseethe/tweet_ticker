@@ -27,7 +27,7 @@ def query(query):
 	tweets = searchTwitter(twitter, query)
 	values, percPos, percNeg = analyzeTweets(tweets)
 	return json.dumps({
-		"data": list(zip(tweets, values)),
+		"data": list(filter(lambda t: t[1] != 0, zip(tweets, values))),
 		"percentPositive": percPos,
 		"percentNegative": percNeg
 	}, indent=0)	
@@ -64,3 +64,6 @@ def analyzeTweets(tweets):
 	percentNegative = (negativeCount * 100) / len(values)
 
 	return (values, percentPositive, percentNegative)
+
+if __name__ == '__main__':
+	app.run(host='0.0.0.0', port=80)
